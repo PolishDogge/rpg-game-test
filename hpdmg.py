@@ -1,35 +1,10 @@
 from random import randint
+from character import levels
+
 damageGiven = 0
 
-class moves:
-    def __init__(self, name, damage, type):
-        self.name = name
-        self.damage = damage
-        self.type = type
-
-class player:
-    def __init__(self, name, health, move, armour, armourtype, dodge, critical,inventory):
-        self.name = name
-        self.health = health
-        self.move = move
-        self.armour = armour
-        self.armourtype = armourtype
-        self.dodge = dodge
-        self.critical = critical
-        self.inventory = inventory
-
-class enemy:
-    def __init__(self, name, health, move, armour,armourtype, dodge, critical):
-        self.name = name
-        self.health = health
-        self.move = move
-        self.armour = armour
-        self.armourtype = armourtype
-        self.dodge = dodge
-        self.critical = critical
-
 #armor types
-#0 = none 0%
+#0 = none 5%
 #1 = light 15%
 #2 = medium 25%
 #3 = heavy 35%
@@ -37,7 +12,9 @@ class enemy:
 def checkarmour(armourtype, armour):
     match armourtype:
         case 0:
-            return 0
+            armour = (armour*5)/100
+            if armour > 0.05:
+                armour = 0.05
         case 1:
             armour = (armour*5)/100
             if armour > 0.15:
@@ -60,6 +37,13 @@ def attack(attacker, defender, move):
     global damageGiven
     damageGiven = 0
     
+    if move.type in defender.race.weakness:
+        move.damage *= 2
+        print("It's super effective!")
+    elif move.type in defender.race.strength:
+        move.damage /= 2
+        print("It's not very effective...")
+    
     if defender.dodge > randint(0, 100):
         print(defender.name + " dodged the attack!")
         return False
@@ -75,15 +59,33 @@ def attack(attacker, defender, move):
             damageGiven = 1
         defender.health -= damageGiven
         print(attacker.name + " attacked " + defender.name + " for " + str(damageGiven) + " damage!")
+        print(defender.name + " has " + str(defender.health) + " health left!")
         
         if defender.health <= 0:
             print(defender.name + " died!")
+            if attacker.hiddenstr == "Player":
+                if defender.xp > 0:
+                    attacker.xp += (defender.xp)
+                    print(attacker.name + " gained " + str(defender.xp) + " xp!")
+                    attacker.xp, attacker.level = levels(attacker.xp, attacker.level)
+                    attacker.gold += (defender.gold)
+                    print(attacker.name + " gained " + str(defender.gold) + " gold!")
+                    input("Press Enter to continue...")
+                    print("--------------------")
             return True
         else:
+            input("Press Enter to continue...")
+            print("--------------------")
             return False
+        
 
 def inspectEnemy(enemy):
     print(enemy.name + " has " + str(enemy.health) + " health left!")
     print(enemy.name + " has " + str(enemy.armour) + " armour, and has an armor type of " + str(enemy.armourtype) + ".")
     print(enemy.name + " has " + str(enemy.dodge) + " dodge.")
     print(enemy.name + " has " + str(enemy.critical) + " critical chance.")
+
+def Heal(player,item):
+    player.health += item.heal
+    print(player.name + " healed to "+ str(player.health) + " health!")
+    item.delete()
