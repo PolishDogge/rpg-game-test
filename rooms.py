@@ -1,5 +1,6 @@
 from random import randint
 from character import *
+from time import sleep
 class room:
     def __init__(self, name, description, north, south, east, west, down, enemies,shop):
         self.name = name
@@ -12,25 +13,19 @@ class room:
         self.enemies = enemies
         self.shop = shop
     
-    def move(self, direction):
-        global current_node
-        current_node = globals()[getattr(self, direction)]
-    
-    def currentRoom(self, name, direction):
+    def currentRoom(self, name, description):
         self.name = name
-        self.direction = direction
+        self.direction = description
         
 
-
-
 def roomGeneration(amount):
-    global currentRoom
+    global CurrentRoom
     amount = int(amount)
     print('Gnerating ' + str(amount) + ' rooms')
     for i in range(amount):
         randomEnemies = []
-        for b in range(randint(1, 3)):
-            randomEnemies.append(character.randomEnemy(1)) 
+        #for b in range(randint(1, 3)):
+        #    randomEnemies.append(character.randomEnemy(1)) 
         
         print('Room ' + str(i) + ' generated')
         globals()["room" + str(i)] = room("room" + str(i), "room" + str(i), None, None, None, None, None, randomEnemies, False)
@@ -39,8 +34,12 @@ def roomGeneration(amount):
     #8 | 9 | 10| 11
     #4 | 5 | 6 | 7
     #0 | 1 | 2 | 3
+    generatePaths(amount)
+    generateShop(amount)
+    return globals()["room" + str(0)]
     
     #automatically generate the room connections
+def generatePaths(amount):
     for i in range(amount):
         if i % 4 != 0:
             globals()["room" + str(i)].west = "room" + str(i - 1)
@@ -49,13 +48,7 @@ def roomGeneration(amount):
             globals()["room" + str(i)].south = "room" + str(i - 4)
             globals()["room" + str(i - 4)].north = "room" + str(i)
     
-    #randomly generate a shop
-    for shopAmount in range(1, int(amount - (amount * 0.75))):
-        shopRoom = randint(0, int(amount - 1))
-        print("Shop generated in room " + str(shopRoom))
-        globals()["room" + str(shopRoom)].shop = True
-        
-    #Debugging room/path generation
+       #Debugging room/path generation
     for i in range(amount):
         print(globals()["room" + str(i)].name + ":")
         print(globals()["room" + str(i)].north)
@@ -63,14 +56,41 @@ def roomGeneration(amount):
         print(globals()["room" + str(i)].east)
         print(globals()["room" + str(i)].west)
         print("")
+    
+    #randomly generate a shop
+def generateShop(amount):
+    shopblacklist = []
+    for shopAmount in range(1, int(amount - (amount * 0.75))):
+        shopRoom = randint(0, int(amount - 1))
+        if shopRoom in shopblacklist:
+            print("Shop already generated in room " + str(shopRoom))
+            continue
+        print("Shop generated in room " + str(shopRoom))
+        globals()["room" + str(shopRoom)].shop = True
+        
 
-
-roomGeneration(16)
-CurrentRoom = room0
-def moveRoom(direction):
+    
+#current room is room0
+CurrentRoom = roomGeneration(16)
+print("Current room: " + CurrentRoom.name)
+print("To the north is: " + CurrentRoom.north)
+#move to any room in the grid by typing the direction you want to move in
+def move(direction):
     global CurrentRoom
-    if getattr(CurrentRoom, direction) != None:
-        CurrentRoom = globals()[getattr(CurrentRoom, direction)]
+    if direction == "north" and CurrentRoom.north == None:
+        print("You can't move in that direction")
+        return
+    elif direction == "south" and CurrentRoom.south == None:
+        print("You can't move in that direction")
+        return
+    elif direction == "east" and CurrentRoom.east == None:
+        print("You can't move in that direction")
+        return
+    elif direction == "west" and CurrentRoom.west == None:
+        print("You can't move in that direction")
+        return
     else:
-        print("You can't go that way")
+        CurrentRoom = globals()[CurrentRoom.__dict__[direction]]
+        print("You are now in " + CurrentRoom.name)
+        return CurrentRoom
     

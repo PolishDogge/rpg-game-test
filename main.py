@@ -8,19 +8,9 @@ from rooms import *
 skeleton = character("Skeleton", 100, 100, moves("Slash", 10, "Physical", None, 1), 0, 0, 1, 1,[], race("undead"), 0, 500, 10, "Enemy")
 mc = createCharacter()
 
+#generating 16 rooms, 4x4 grid
+roomGeneration(16)
 
-#name, description, north, south, east, west, down, enemies
-for i in range(5):
-    globals()["room"+ str(i)] = room("room"+ str(i), "room"+ str(i), None, None, None, None, None, character.randomEnemy(randint(0, 3)))
-
-current_node = room0
-directions = ['north', 'south', 'east', 'west', 'down']
-short_directions = ['n', 's', 'e', 'w', 'd']
-print('Room0 enemies: ')
-for i in range(len(current_node.enemies)):
-    print(current_node.enemies[i].name)
-
-print("You are in " + current_node.name)
 
 print('-' * 20)
 print('Character stats:')
@@ -38,3 +28,11 @@ for i in range(len(mc.inventory)):
 print('Current XP: ' + str(mc.xp))
 print('Current level: ' + str(mc.level))
 print('Current gold: ' + str(mc.gold))
+
+print('-' * 20)
+print('Lets move to some rooms!')
+print('We are currently in ' + CurrentRoom.name)
+move('north')
+print('We are now in ' + CurrentRoom.name)
+print('Lets try to move into a wall')
+move('west')
