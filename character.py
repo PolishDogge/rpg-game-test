@@ -90,15 +90,24 @@ class character:
     def randomEnemy(amount):
         enemies = []
         x = randint(0, 100)
-        #print(x)
-        if x > 20:
+        print(f'{x} was generated in randomEnemy')
+        if x > 20 and x < 40:
             for y in range(amount):
                 enemy = character(f"{y} Skeleton", 100, 100, (slash), 0, 0, 1,1,[],race("undead"), 0, 500, 10, "Enemy")
                 enemies.append(enemy)
-        else:
+        
+        elif x > 40 and x < 60:
             for y in range(amount):
                 enemy = character(f'{y} Cultist', 80, 80, (slash), 0, 0, 5, 5, [], race("human"), 0, 700, 50, "Enemy")
                 enemies.append(enemy)
+        
+        elif x > 60 < 95:
+            for y in range(amount):
+                enemy = character(f'{y} Orc', 120, 120, (slash), 0, 0, 1, 1, [],race("orc"), 0, 1000, 100, "Enemy")
+                enemies.append(enemy)
+                
+        elif x > 95 < 100:
+            enemies.append(character("Dragon", 350, 350, (slash, fireBall), 0, 0, 1, 1, [], race("dragon"), 0, 2000, 500, "Enemy"))
         return enemies
         
 level1 = 100
