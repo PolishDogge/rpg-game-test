@@ -96,6 +96,7 @@ damageGiven = 0
 #2 = medium 25%
 #3 = heavy 35%
 #4 = v. heavy 55%
+#percentages are max values
 def checkarmour(armourtype, armour):
     match armourtype:
         case 0:
@@ -120,6 +121,7 @@ def checkarmour(armourtype, armour):
                 armour = 0.55
     return armour
 
+#attack
 def attack(attacker, defender, move):
     global damageGiven
     damageGiven = 0
@@ -166,7 +168,7 @@ def attack(attacker, defender, move):
             print("--------------------")
             return False
         
-
+#inspect enemy
 def inspectEnemy(enemy):
     print(enemy.name + " has " + str(enemy.health) + " health left.")
     print(enemy.name + " has " + str(enemy.armour) + " armour, and has an armor type of " + str(enemy.armourtype) + ".")
