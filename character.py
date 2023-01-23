@@ -91,11 +91,11 @@ class character:
         enemies = []
         x = randint(0, 100)
         print(f'{x} was generated in randomEnemy')
+        #[Todo] actually fucking fix this
         if x > 20 and x < 40:
-            for y in range(amount):
-                enemy = character(f"{y} Skeleton", 100, 100, (slash), 0, 0, 1,1,[],race("undead"), 0, 500, 10, "Enemy")
-                enemies.append(enemy)
-        
+                for y in range(amount):
+                    enemy = character(f"{y} Skeleton", 100, 100, (slash), 0, 0, 1,1,[],race("undead"), 0, 500, 10, "Enemy")
+                    enemies.append(enemy)           
         elif x > 40 and x < 60:
             for y in range(amount):
                 enemy = character(f'{y} Cultist', 80, 80, (slash), 0, 0, 5, 5, [], race("human"), 0, 700, 50, "Enemy")
@@ -142,11 +142,11 @@ def createCharacter():
     
     match whatClass:
         case "warrior":
-            player = character(name, 100, 100, (slash, punch, kick), 0, 0, 1,1,[wooden_sword, potion],race(str(whatRace)), 0, 0, 0, "Player")
+            player = character(name, 100, 100, (slash, punch, kick), 0, 0, 1,1,[items.wooden_sword, items.potion],race(str(whatRace)), 0, 0, 0, "Player")
         case "mage":
-            player = character(name, 80, 80, (fireBall, thunderBolt),0,0,1,1,[staff,potion], race(str(whatRace)), 0, 0, 0, "Player")
+            player = character(name, 80, 80, (fireBall, thunderBolt),0,0,1,1,[items.staff,items.potion], race(str(whatRace)), 0, 0, 0, "Player")
         case "rogue":
-            player = character(name, 90, 90, (quickslash,posionDagger),0,0,5,5,[dagger,potion], race(str(whatRace)), 0, 0, 0, "Player")
+            player = character(name, 90, 90, (quickslash,posionDagger),0,0,5,5,[items.dagger,items.potion], race(str(whatRace)), 0, 0, 0, "Player")
         case "archer":
-            player = character(name, 90, 90, (quickslash, bowUse),0,0,5,5,[bow,dagger,potion], race(str(whatRace)), 0, 0, 0, "Player")
+            player = character(name, 90, 90, (quickslash, bowUse),0,0,5,5,[items.bow,items.dagger,items.potion], race(str(whatRace)), 0, 0, 0, "Player")
     return player
